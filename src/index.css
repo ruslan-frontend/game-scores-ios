@@ -26,21 +26,67 @@ body {
 .ant-card {
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--tg-theme-bg-color, #ffffff) !important;
+  border-color: var(--tg-theme-hint-color, #f0f0f0);
+  color: var(--tg-theme-text-color, #000000);
+}
+
+.ant-card-head {
+  color: var(--tg-theme-text-color, #000000);
+  border-color: var(--tg-theme-hint-color, #f0f0f0);
 }
 
 .ant-list-item {
   border-radius: 8px;
   margin-bottom: 8px;
   background-color: var(--tg-theme-bg-color, #ffffff);
+  color: var(--tg-theme-text-color, #000000);
+  border-color: var(--tg-theme-hint-color, #f0f0f0);
 }
 
 .ant-btn-primary {
-  background-color: var(--tg-theme-button-color, #2481cc);
-  border-color: var(--tg-theme-button-color, #2481cc);
+  background-color: var(--tg-theme-button-color, #2481cc) !important;
+  border-color: var(--tg-theme-button-color, #2481cc) !important;
+  color: var(--tg-theme-button-text-color, #ffffff) !important;
 }
 
 .ant-btn-primary:hover {
-  background-color: var(--tg-theme-button-color, #2481cc);
-  border-color: var(--tg-theme-button-color, #2481cc);
-  opacity: 0.8;
+  background-color: var(--tg-theme-button-color, #2481cc) !important;
+  border-color: var(--tg-theme-button-color, #2481cc) !important;
+  color: var(--tg-theme-button-text-color, #ffffff) !important;
+  opacity: 0.9;
+}
+
+.ant-btn:not(.ant-btn-primary) {
+  color: var(--tg-theme-text-color, #000000);
+  border-color: var(--tg-theme-hint-color, #d9d9d9);
+}
+
+.ant-btn:not(.ant-btn-primary):hover {
+  color: var(--tg-theme-link-color, #2481cc);
+  border-color: var(--tg-theme-link-color, #2481cc);
+}
+
+.ant-input,
+.ant-select-selector,
+.ant-input-affix-wrapper {
+  background-color: var(--tg-theme-bg-color, #ffffff) !important;
+  color: var(--tg-theme-text-color, #000000) !important;
+  border-color: var(--tg-theme-hint-color, #d9d9d9);
+}
+
+.ant-tabs-tab {
+  color: var(--tg-theme-hint-color, rgba(0, 0, 0, 0.65));
+}
+
+.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--tg-theme-text-color, #000000);
+}
+
+.ant-typography {
+  color: var(--tg-theme-text-color, #000000);
+}
+
+.ant-typography.ant-typography-secondary {
+  color: var(--tg-theme-hint-color, rgba(0, 0, 0, 0.65));
 }

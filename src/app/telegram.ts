@@ -1,9 +1,14 @@
+export type TelegramColorScheme = 'light' | 'dark';
+
 declare global {
   interface Window {
     Telegram: {
       WebApp: {
         ready: () => void;
         expand: () => void;
+        colorScheme?: TelegramColorScheme;
+        onEvent?: (eventType: string, callback: () => void) => void;
+        offEvent?: (eventType: string, callback: () => void) => void;
         MainButton: {
           text: string;
           color: string;
@@ -55,24 +60,83 @@ declare global {
   }
 }
 
-export const initTelegramWebApp = () => {
+const applyThemeParams = () => {
+  if (typeof window === 'undefined' || !window.Telegram?.WebApp) return;
+  const tg = window.Telegram.WebApp;
+  const p = tg.themeParams;
+  document.documentElement.style.setProperty('--tg-theme-bg-color', p.bg_color || '#ffffff');
+  document.documentElement.style.setProperty('--tg-theme-text-color', p.text_color || '#000000');
+  document.documentElement.style.setProperty('--tg-theme-hint-color', p.hint_color || '#999999');
+  document.documentElement.style.setProperty('--tg-theme-link-color', p.link_color || '#2481cc');
+  document.documentElement.style.setProperty('--tg-theme-button-color', p.button_color || '#2481cc');
+  document.documentElement.style.setProperty('--tg-theme-button-text-color', p.button_text_color || '#ffffff');
+};
+
+export const initTelegramWebApp = (onThemeChange?: () => void) => {
   if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
     const tg = window.Telegram.WebApp;
-    
+
     tg.ready();
     tg.expand();
-    
-    document.documentElement.style.setProperty('--tg-theme-bg-color', tg.themeParams.bg_color || '#ffffff');
-    document.documentElement.style.setProperty('--tg-theme-text-color', tg.themeParams.text_color || '#000000');
-    document.documentElement.style.setProperty('--tg-theme-hint-color', tg.themeParams.hint_color || '#999999');
-    document.documentElement.style.setProperty('--tg-theme-link-color', tg.themeParams.link_color || '#2481cc');
-    document.documentElement.style.setProperty('--tg-theme-button-color', tg.themeParams.button_color || '#2481cc');
-    document.documentElement.style.setProperty('--tg-theme-button-text-color', tg.themeParams.button_text_color || '#ffffff');
-    
+
+    applyThemeParams();
+
+    const handleThemeChange = () => {
+      applyThemeParams();
+      onThemeChange?.();
+    };
+
+    if (tg.onEvent) {
+      tg.onEvent('themeChanged', handleThemeChange);
+    }
+
     return tg;
   }
-  
+
   return null;
+};
+
+export const getTelegramColorScheme = (): TelegramColorScheme => {
+  if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+    const tg = window.Telegram.WebApp;
+    if (tg.colorScheme === 'dark' || tg.colorScheme === 'light') {
+      return tg.colorScheme;
+    }
+    const bg = tg.themeParams.bg_color;
+    if (bg) {
+      const hex = bg.replace('#', '').slice(0, 6);
+      if (hex.length === 6) {
+        const r = parseInt(hex.slice(0, 2), 16);
+        const g = parseInt(hex.slice(2, 4), 16);
+        const b = parseInt(hex.slice(4, 6), 16);
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance > 0.5 ? 'light' : 'dark';
+      }
+    }
+  }
+  return 'light';
+};
+
+export const getTelegramThemeParams = () => {
+  if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+    const p = window.Telegram.WebApp.themeParams;
+    return {
+      bgColor: p.bg_color || '#ffffff',
+      textColor: p.text_color || '#000000',
+      hintColor: p.hint_color || '#999999',
+      linkColor: p.link_color || '#2481cc',
+      buttonColor: p.button_color || '#2481cc',
+      buttonTextColor: p.button_text_color || '#ffffff',
+    };
+  }
+  return {
+    bgColor: '#ffffff',
+    textColor: '#000000',
+    hintColor: '#999999',
+    linkColor: '#2481cc',
+    buttonColor: '#2481cc',
+    buttonTextColor: '#ffffff',
+  };
 };
 
 export const getTelegramUser = () => {
