@@ -88,6 +88,7 @@ export const EditParticipant: React.FC<EditParticipantProps> = ({
         onCancel={() => setVisible(false)}
         footer={null}
         width={400}
+        style={{ maxWidth: 'calc(100vw - 32px)' }}
       >
         <Form
           form={form}
@@ -115,7 +116,7 @@ export const EditParticipant: React.FC<EditParticipantProps> = ({
           </Form.Item>
 
           <Form.Item label="Цвет аватара">
-            <Space>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12 }}>
               <ColorPicker
                 value={selectedColor}
                 onChange={handleColorChange}
@@ -126,23 +127,24 @@ export const EditParticipant: React.FC<EditParticipantProps> = ({
                   },
                 ]}
                 showText
-                size="large"
+                size="middle"
               />
-              <span style={{ color: '#666', fontSize: '14px' }}>
-                Выберите цвет или используйте рекомендуемые
+              <span style={{ color: 'var(--tg-theme-hint-color)', fontSize: 13 }}>
+                Выберите цвет
               </span>
-            </Space>
+            </div>
           </Form.Item>
 
-          <Form.Item style={{ marginBottom: 0, textAlign: 'right' }}>
-            <Space>
-              <Button onClick={() => setVisible(false)}>
+          <Form.Item style={{ marginBottom: 0 }}>
+            <Space style={{ width: '100%', justifyContent: 'flex-end' }} size="middle">
+              <Button onClick={() => setVisible(false)} style={{ minWidth: 100 }}>
                 Отмена
               </Button>
               <Button
                 type="primary"
                 htmlType="submit"
                 loading={loading}
+                style={{ minWidth: 120 }}
               >
                 Сохранить
               </Button>

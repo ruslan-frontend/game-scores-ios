@@ -5,11 +5,13 @@ const { Content } = AntLayout;
 
 const StyledLayout = styled(AntLayout)`
   min-height: 100vh;
+  min-height: calc(100vh - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
   background: var(--tg-theme-bg-color, #ffffff);
 `;
 
 const StyledContent = styled(Content)`
-  padding: 16px;
+  padding: 12px 16px 24px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0));
   background: var(--tg-theme-bg-color, #ffffff);
 `;
 

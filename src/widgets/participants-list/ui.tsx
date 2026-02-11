@@ -31,16 +31,18 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({ refreshTrigg
   };
 
   return (
-    <Card title="Участники" style={{ marginBottom: 16 }}>
+    <Card title="Участники" style={{ marginBottom: 0 }}>
       {participants.length === 0 ? (
-        <Text type="secondary">Участники не добавлены</Text>
+        <Text type="secondary" style={{ display: 'block', padding: '16px 0' }}>
+          Участники не добавлены
+        </Text>
       ) : (
         <List
           dataSource={participants}
           renderItem={(participant) => (
             <List.Item
               actions={[
-                <Space key="actions">
+                <Space key="actions" size="small">
                   <EditParticipant
                     participant={participant}
                     onSuccess={loadParticipants}
@@ -49,6 +51,7 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({ refreshTrigg
                         type="text"
                         icon={<EditOutlined />}
                         size="small"
+                        aria-label="Редактировать"
                       />
                     }
                   />
@@ -56,14 +59,17 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({ refreshTrigg
                     title="Удалить участника?"
                     description="Это действие нельзя отменить"
                     onConfirm={() => handleDelete(participant.id)}
-                    okText="Да"
-                    cancelText="Нет"
+                    okText="Удалить"
+                    cancelText="Отмена"
+                    okButtonProps={{ size: 'middle' }}
+                    cancelButtonProps={{ size: 'middle' }}
                   >
                     <Button
                       type="text"
                       danger
                       icon={<DeleteOutlined />}
                       size="small"
+                      aria-label="Удалить"
                     />
                   </Popconfirm>
                 </Space>
@@ -74,7 +80,7 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({ refreshTrigg
                   <ParticipantAvatar
                     name={participant.name}
                     color={participant.color}
-                    size={40}
+                    size={44}
                   />
                 }
                 title={participant.name}

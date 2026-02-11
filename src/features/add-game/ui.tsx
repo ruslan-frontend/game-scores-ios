@@ -28,7 +28,13 @@ export const AddGame: React.FC<AddGameProps> = ({ onSuccess }) => {
 
   const handleGameTitleSelect = (title: string) => {
     form.setFieldsValue({ name: title });
-    setCustomGameName('');
+    setCustomGameName(title);
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = e.target.value;
+    setCustomGameName(v);
+    form.setFieldsValue({ name: v });
   };
 
   const handleSubmit = async (values: { 
@@ -86,14 +92,14 @@ export const AddGame: React.FC<AddGameProps> = ({ onSuccess }) => {
       <Form.Item label="Название игры">
         {gameTitles.length > 0 && (
           <div style={{ marginBottom: 12 }}>
-            <div style={{ marginBottom: 8, fontSize: '14px', color: '#666' }}>
+            <div style={{ marginBottom: 8, fontSize: 13, color: 'var(--tg-theme-hint-color)' }}>
               Быстрый выбор:
             </div>
-            <Space size={[0, 8]} wrap>
-              {gameTitles.map(title => (
+            <Space size={[8, 8]} wrap>
+              {gameTitles.map((title) => (
                 <Tag
                   key={title}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: 'pointer', margin: 0, padding: '8px 14px' }}
                   onClick={() => handleGameTitleSelect(title)}
                 >
                   {title}
@@ -111,7 +117,7 @@ export const AddGame: React.FC<AddGameProps> = ({ onSuccess }) => {
             placeholder="Или введите новое название"
             maxLength={100}
             value={customGameName}
-            onChange={(e) => setCustomGameName(e.target.value)}
+            onChange={handleNameChange}
           />
         </Form.Item>
       </Form.Item>
@@ -141,13 +147,13 @@ export const AddGame: React.FC<AddGameProps> = ({ onSuccess }) => {
         </Select>
       </Form.Item>
 
-      <Form.Item>
+      <Form.Item style={{ marginBottom: 0 }}>
         <Button
           type="primary"
           htmlType="submit"
           loading={loading}
           icon={<PlusOutlined />}
-          style={{ width: '100%' }}
+          block
         >
           Добавить игру
         </Button>

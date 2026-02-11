@@ -33,13 +33,13 @@ export const AddParticipant: React.FC<AddParticipantProps> = ({ onSuccess }) => 
   return (
     <Form
       form={form}
-      layout="inline"
+      layout="vertical"
       onFinish={handleSubmit}
       style={{ width: '100%' }}
     >
       <Form.Item
         name="name"
-        style={{ flex: 1 }}
+        style={{ marginBottom: 12 }}
         rules={[{ required: true, message: 'Введите имя участника' }]}
       >
         <Input
@@ -47,14 +47,15 @@ export const AddParticipant: React.FC<AddParticipantProps> = ({ onSuccess }) => 
           maxLength={50}
         />
       </Form.Item>
-      <Form.Item>
+      <Form.Item style={{ marginBottom: 0 }}>
         <Button
           type="primary"
           htmlType="submit"
           loading={loading}
           icon={<UserAddOutlined />}
+          block
         >
-          Добавить
+          Добавить участника
         </Button>
       </Form.Item>
     </Form>

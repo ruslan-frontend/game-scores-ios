@@ -192,7 +192,7 @@ export const StatisticsDashboard: React.FC<StatisticsDashboardProps> = ({ refres
   ];
 
   return (
-    <Card title={<><TrophyOutlined /> Статистика</>}>
+    <Card title={<><TrophyOutlined /> Статистика</>} style={{ marginBottom: 0 }}>
       <Tabs
         defaultActiveKey="general"
         items={tabItems}

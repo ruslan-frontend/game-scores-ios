@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { List, Button, Typography, Card, Popconfirm, Tag, Space, Avatar } from 'antd';
+import { List, Button, Typography, Card, Popconfirm, Tag, Avatar } from 'antd';
 import { DeleteOutlined, TrophyOutlined } from '@ant-design/icons';
 import { GameAdapter, ParticipantAdapter } from '../../shared/lib/data-adapter';
 import { ParticipantAvatar } from '../../shared/ui';
@@ -48,9 +48,11 @@ export const GamesList: React.FC<GamesListProps> = ({ refreshTrigger }) => {
   };
 
   return (
-    <Card title="История игр" style={{ marginBottom: 16 }}>
+    <Card title="История игр" style={{ marginBottom: 0 }}>
       {games.length === 0 ? (
-        <Text type="secondary">Игры не добавлены</Text>
+        <Text type="secondary" style={{ display: 'block', padding: '16px 0' }}>
+          Игры не добавлены
+        </Text>
       ) : (
         <List
           dataSource={games}
@@ -58,52 +60,59 @@ export const GamesList: React.FC<GamesListProps> = ({ refreshTrigger }) => {
             <List.Item
               actions={[
                 <Popconfirm
+                  key="delete"
                   title="Удалить игру?"
                   description="Это действие нельзя отменить"
                   onConfirm={() => handleDelete(game.id)}
-                  okText="Да"
-                  cancelText="Нет"
+                  okText="Удалить"
+                  cancelText="Отмена"
+                  okButtonProps={{ size: 'middle' }}
+                  cancelButtonProps={{ size: 'middle' }}
                 >
                   <Button
                     type="text"
                     danger
                     icon={<DeleteOutlined />}
                     size="small"
+                    aria-label="Удалить игру"
                   />
                 </Popconfirm>
               ]}
             >
               <List.Item.Meta
-                avatar={<TrophyOutlined />}
+                avatar={
+                  <span style={{ fontSize: 24, color: 'var(--tg-theme-button-color, #2481cc)' }}>
+                    <TrophyOutlined />
+                  </span>
+                }
                 title={
-                  <div>
+                  <div style={{ marginBottom: 4 }}>
                     {game.name}
-                    <Tag color="gold" style={{ marginLeft: 8 }}>
-                      Победитель: {getParticipantName(game.winnerId)}
-                    </Tag>
                   </div>
                 }
                 description={
                   <div>
-                    <div style={{ marginBottom: 8 }}>
-                      <Space size="small">
-                        <span>Участники:</span>
-                        <Avatar.Group size="small" max={{ count: 4 }}>
-                          {game.participants.map(participantId => {
-                            const participant = getParticipant(participantId);
-                            return participant ? (
-                              <ParticipantAvatar
-                                key={participantId}
-                                name={participant.name}
-                                color={participant.color}
-                                size={24}
-                              />
-                            ) : null;
-                          })}
-                        </Avatar.Group>
-                      </Space>
+                    <Tag color="gold" style={{ marginBottom: 4 }}>
+                      🏆 {getParticipantName(game.winnerId)}
+                    </Tag>
+                    <div style={{ marginTop: 4 }}>
+                      <Avatar.Group size="small" max={{ count: 4 }}>
+                        {game.participants.map((participantId) => {
+                          const participant = getParticipant(participantId);
+                          return participant ? (
+                            <ParticipantAvatar
+                              key={participantId}
+                              name={participant.name}
+                              color={participant.color}
+                              size={24}
+                            />
+                          ) : null;
+                        })}
+                      </Avatar.Group>
+                      <span style={{ marginLeft: 8, color: 'var(--tg-theme-hint-color)' }}>
+                        {formatDate(game.date)}
+                      </span>
                     </div>
-                    <div>Дата: {formatDate(game.date)}</div>
                   </div>
                 }
               />
