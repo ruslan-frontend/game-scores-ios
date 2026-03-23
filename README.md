@@ -1,6 +1,6 @@
-# Game Scores - Telegram Mini App
+# Game Scores - iOS App
 
-Приложение для отслеживания результатов настольных игр в Telegram.
+Приложение для отслеживания результатов настольных игр на iPhone.
 
 ## Возможности
 
@@ -11,7 +11,6 @@
 - ✅ История всех игр с датами
 - ✅ Удаление участников и игр
 - ✅ Адаптивный дизайн для мобильных устройств
-- ✅ Интеграция с Telegram Mini App
 - ✅ Синхронизация данных через Supabase
 - ✅ Работа офлайн с localStorage
 
@@ -22,8 +21,25 @@
 - **Ant Design** для UI компонентов
 - **Styled Components** для стилизации
 - **FSD архитектура** (Feature-Sliced Design)
-- **Telegram Mini App SDK**
+- **Capacitor** — нативная оболочка для **iPhone** (iOS)
 - **Supabase** для бэкенда и синхронизации
+
+## Приложение для iPhone (iOS)
+
+Тот же веб-код собирается в нативное приложение через [Capacitor](https://capacitorjs.com/). На устройстве создаётся стабильный профиль пользователя (отдельный `telegram_id` в Supabase, отрицательное число, чтобы не пересекаться с реальными ID Telegram).
+
+**Требования:** macOS, Xcode, Apple Developer (для установки на физическое устройство или TestFlight).
+
+```bash
+npm install
+npm run build
+npx cap sync ios
+npx cap open ios
+```
+
+В Xcode выберите симулятор или устройство и нажмите Run. Переменные `VITE_SUPABASE_*` подставляются на этапе `npm run build` — задайте их в `.env` / `.env.production` перед сборкой.
+
+Скрипты: `npm run ios:run` — сборка веб-части, синхронизация с проектом iOS и открытие Xcode.
 
 ## Запуск
 
@@ -62,33 +78,6 @@ src/
 **Данные сохраняются:**
 - В **Supabase** (если настроен) - синхронизация между устройствами  
 - В **localStorage** (как fallback) - автономная работа
-
-## Деплой как Telegram Mini App
-
-Подробная инструкция находится в файле [DEPLOYMENT.md](./DEPLOYMENT.md).
-
-### Краткий гайд:
-
-1. **Соберите проект:**
-   ```bash
-   npm run build
-   ```
-
-2. **Задеплойте на хостинг:**
-   - Vercel: `vercel --prod`
-   - Netlify: перетащите папку `dist`
-   - GitHub Pages: `npm run deploy`
-
-3. **Создайте бота:**
-   - Откройте [@BotFather](https://t.me/BotFather)
-   - `/newbot` → укажите название и username
-
-4. **Настройте Mini App:**
-   - `/newapp` в @BotFather
-   - Укажите URL деплоя
-   - Загрузите иконку
-
-5. **Готово!** 🎉
 
 ## Интеграция с Supabase
 

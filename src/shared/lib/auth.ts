@@ -1,6 +1,11 @@
 import { supabase } from '../config/supabase';
-import { getTelegramUser, getTelegramContext } from '../../app/telegram';
+import { getTelegramContext } from '../../app/telegram';
 import type { User, TelegramContext } from '../types';
+import {
+  initNativeAppIdentity,
+  isCapacitorNative,
+  isNativeIdentityReady,
+} from './native-identity';
 
 export class AuthService {
   private static currentUser: User | null = null;
@@ -12,7 +17,11 @@ export class AuthService {
     }
 
     try {
-      // Получаем контекст Telegram
+      if (isCapacitorNative()) {
+        await initNativeAppIdentity();
+      }
+
+      // Получаем контекст Telegram или нативного приложения
       const context = getTelegramContext();
       this.currentContext = context;
       
@@ -77,10 +86,19 @@ export class AuthService {
   }
 
   static isAuthenticated(): boolean {
-    return this.currentUser !== null && getTelegramUser() !== null;
+    if (this.currentUser === null) return false;
+    return isCapacitorNative() ? isNativeIdentityReady() : true;
   }
 
-  private static mapToUser(dbUser: any): User {
+  private static mapToUser(dbUser: {
+    id: string;
+    telegram_id: number;
+    username: string | null;
+    first_name: string | null;
+    last_name: string | null;
+    created_at: string;
+    updated_at: string;
+  }): User {
     return {
       id: dbUser.id,
       telegramId: dbUser.telegram_id,

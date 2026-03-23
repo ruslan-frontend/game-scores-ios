@@ -1,10 +1,17 @@
 import { useEffect, useState, useMemo } from 'react';
 import { ConfigProvider, theme, Spin, Alert, Button } from 'antd';
 import type { ThemeConfig } from 'antd';
+import { Capacitor } from '@capacitor/core';
 import { Layout } from './shared/ui';
 import { MainPage } from './pages/main';
-import { initTelegramWebApp, getTelegramColorScheme, getTelegramThemeParams } from './app/telegram';
+import {
+  initTelegramWebApp,
+  getTelegramColorScheme,
+  getTelegramThemeParams,
+  applyNativeThemeVars,
+} from './app/telegram';
 import { AuthService } from './shared/lib/auth';
+import { isCapacitorNative } from './shared/lib/native-identity';
 import 'antd/dist/reset.css';
 
 function App() {
@@ -20,6 +27,9 @@ function App() {
 
         initTelegramWebApp(() => setColorScheme(getTelegramColorScheme()));
         setColorScheme(getTelegramColorScheme());
+        if (isCapacitorNative()) {
+          applyNativeThemeVars();
+        }
 
         // Проверяем настройки Supabase
         if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
@@ -37,6 +47,22 @@ function App() {
     };
 
     initApp();
+  }, []);
+
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+    applyNativeThemeVars();
+  }, [colorScheme]);
+
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const onChange = () => {
+      setColorScheme(getTelegramColorScheme());
+      applyNativeThemeVars();
+    };
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
   }, []);
 
   const handleRetry = () => {
@@ -92,7 +118,6 @@ function App() {
                 <ul>
                   <li>Не настроены переменные окружения Supabase</li>
                   <li>Проблемы с подключением к базе данных</li>
-                  <li>Приложение должно работать в Telegram WebApp</li>
                 </ul>
               </div>
             }

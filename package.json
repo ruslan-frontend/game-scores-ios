@@ -8,11 +8,16 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "npm run build && gh-pages -d dist",
+    "cap:sync": "npx cap sync",
+    "ios:open": "npx cap open ios",
+    "ios:run": "npm run build && npx cap sync ios && npx cap open ios"
   },
   "dependencies": {
+    "@capacitor/core": "^8.2.0",
+    "@capacitor/ios": "^8.2.0",
+    "@capacitor/preferences": "^8.0.1",
     "@supabase/supabase-js": "^2.76.1",
-    "@telegram-apps/sdk": "^3.11.8",
     "antd": "^5.27.6",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
@@ -20,6 +25,7 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.2.0",
     "@eslint/js": "^9.36.0",
     "@types/node": "^24.6.0",
     "@types/react": "^19.1.16",
